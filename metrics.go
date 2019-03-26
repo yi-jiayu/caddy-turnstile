@@ -69,9 +69,6 @@ func NewCallbackQueryEvent(t time.Time, query CallbackQuery) Event {
 // ExtractEvent returns a pointer to an event derived from an incoming update,
 // or nil if the update does not contain an event.
 func ExtractEvent(t time.Time, update Update) *Event {
-	if update.UpdateID == 0 {
-		return nil
-	}
 	var event Event
 	switch {
 	case update.Message != nil:
