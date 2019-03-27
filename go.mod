@@ -15,6 +15,7 @@ require (
 	github.com/lucas-clemente/aes12 v0.0.0-20171027163421-cd47fb39b79f // indirect
 	github.com/lucas-clemente/quic-go v0.10.1-no-integrationtests // indirect
 	github.com/lucas-clemente/quic-go-certificates v0.0.0-20160823095156-d2f86524cced // indirect
+	github.com/mattn/go-sqlite3 v1.10.0
 	github.com/mholt/caddy v0.11.5
 	github.com/mholt/certmagic v0.0.0-20190225061201-e3e89d1096d7 // indirect
 	github.com/onsi/ginkgo v1.8.0 // indirect

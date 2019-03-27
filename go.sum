@@ -37,6 +37,8 @@ github.com/lucas-clemente/quic-go v0.10.1-no-integrationtests h1:iiJHgXPEepBV40k
 github.com/lucas-clemente/quic-go v0.10.1-no-integrationtests/go.mod h1:wuD+2XqEx8G9jtwx5ou2BEYBsE+whgQmlj0Vz/77PrY=
 github.com/lucas-clemente/quic-go-certificates v0.0.0-20160823095156-d2f86524cced h1:zqEC1GJZFbGZA0tRyNZqRjep92K5fujFtFsu5ZW7Aug=
 github.com/lucas-clemente/quic-go-certificates v0.0.0-20160823095156-d2f86524cced/go.mod h1:NCcRLrOTZbzhZvixZLlERbJtDtYsmMw8Jc4vS8Z0g58=
+github.com/mattn/go-sqlite3 v1.10.0 h1:jbhqpg7tQe4SupckyijYiy0mJJ/pRyHvXf7JdWK860o=
+github.com/mattn/go-sqlite3 v1.10.0/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=
 github.com/mholt/caddy v0.11.5 h1:JdEOU5HeeoflcqnWowqJ0GNj/fHd6FfHYT85/WNQ/Sc=
 github.com/mholt/caddy v0.11.5/go.mod h1:Wb1PlT4DAYSqOEd03MsqkdkXnTxA8v9pKjdpxbqM1kY=
 github.com/mholt/certmagic v0.0.0-20190225061201-e3e89d1096d7 h1:xHjqRzqXq90L9WQBxd5mwV2XJdQzJ3yG6plU8zse4x8=

@@ -12,6 +12,11 @@ const (
 	EventTypeCallbackQuery      = "callback_query"
 )
 
+// Collector is the interface implemented by event consumers.
+type Collector interface {
+	Collect(Event) error
+}
+
 // Event represents a single interaction with aaa bot.
 type Event struct {
 	Time         time.Time
