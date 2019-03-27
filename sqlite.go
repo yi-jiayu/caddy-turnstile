@@ -2,8 +2,10 @@ package turnstile
 
 import (
 	"database/sql"
+	"log"
 
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/mholt/caddy/caddyfile"
 )
 
 type SQLiteCollector struct {
@@ -64,4 +66,15 @@ func NewSQLiteCollector(f string) (*SQLiteCollector, error) {
 		return nil, err
 	}
 	return c, nil
+}
+
+func SQLiteCollectorFactory(d *caddyfile.Dispenser) (Collector, error) {
+	var f string
+	if d.NextArg() {
+		f = d.Val()
+	} else {
+		return nil, d.ArgErr()
+	}
+	log.Printf("[INFO] turnstile: using sqlite collector (database file: %s)", f)
+	return NewSQLiteCollector(f)
 }

@@ -7,7 +7,6 @@ import (
 )
 
 func TestExtractEvent(t *testing.T) {
-
 	tests := []struct {
 		name   string
 		update Update
