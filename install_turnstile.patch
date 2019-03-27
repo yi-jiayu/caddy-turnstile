@@ -1,0 +1,44 @@
+diff --git a/caddy/build.go b/caddy/build.go
+index 8277858..17a4673 100644
+--- a/caddy/build.go
++++ b/caddy/build.go
+@@ -77,14 +77,10 @@ func main() {
+ 	cmd.Stdout = os.Stdout
+ 	cmd.Env = os.Environ()
+ 	for _, env := range []string{
+-		"CGO_ENABLED=0",
+ 		"GOOS=" + goos,
+ 		"GOARCH=" + goarch,
+ 		"GOARM=" + goarm,
+ 	} {
+-		if race && env == "CGO_ENABLED=0" {
+-			continue
+-		}
+ 		cmd.Env = append(cmd.Env, env)
+ 	}
+ 
+diff --git a/caddy/caddymain/run.go b/caddy/caddymain/run.go
+index dc90d0e..e36adaf 100644
+--- a/caddy/caddymain/run.go
++++ b/caddy/caddymain/run.go
+@@ -39,6 +39,8 @@ import (
+ 
+ 	_ "github.com/mholt/caddy/caddyhttp" // plug in the HTTP server type
+ 	// This is where other plugins get plugged in (imported)
++
++	_ "github.com/yi-jiayu/turnstile"
+ )
+ 
+ func init() {
+diff --git a/caddyhttp/httpserver/plugin.go b/caddyhttp/httpserver/plugin.go
+index 7da6239..f9d600a 100644
+--- a/caddyhttp/httpserver/plugin.go
++++ b/caddyhttp/httpserver/plugin.go
+@@ -670,6 +670,7 @@ var directives = []string{
+ 	"datadog",    // github.com/payintech/caddy-datadog
+ 	"prometheus", // github.com/miekg/caddy-prometheus
+ 	"templates",
++	"turnstile",  // github.com/yi-jiayu/turnstile
+ 	"proxy",
+ 	"fastcgi",
+ 	"cgi", // github.com/jung-kurt/caddy-cgi
