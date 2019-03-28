@@ -14,6 +14,22 @@ type SQLiteCollector struct {
 	db *sql.DB
 }
 
+func insertEvent(stmt *sql.Stmt, event Event) (sql.Result, error) {
+	languageCode := sql.NullString{
+		String: event.LanguageCode,
+		Valid:  event.LanguageCode != "",
+	}
+	chatID := sql.NullInt64{
+		Int64: event.ChatID,
+		Valid: event.ChatID != 0,
+	}
+	chatType := sql.NullString{
+		String: event.ChatType,
+		Valid:  event.ChatType != "",
+	}
+	return stmt.Exec(event.Time, event.Type, event.UserID, languageCode, chatID, chatType)
+}
+
 func (c *SQLiteCollector) Collect(event Event) error {
 	tx, err := c.db.Begin()
 	if err != nil {
@@ -24,8 +40,7 @@ func (c *SQLiteCollector) Collect(event Event) error {
 		return err
 	}
 	defer stmt.Close()
-	// TODO: store empty fields as nulls?
-	_, err = stmt.Exec(event.Time, event.Type, event.UserID, event.LanguageCode, event.ChatID, event.ChatType)
+	_, err = insertEvent(stmt, event)
 	if err != nil {
 		return err
 	}
