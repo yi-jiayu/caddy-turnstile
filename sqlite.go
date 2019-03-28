@@ -5,6 +5,8 @@ import (
 	"log"
 
 	_ "github.com/mattn/go-sqlite3"
+
+	"github.com/mholt/caddy"
 	"github.com/mholt/caddy/caddyfile"
 )
 
@@ -57,10 +59,19 @@ func NewSQLiteCollector(f string) (*SQLiteCollector, error) {
 	if err != nil {
 		return nil, err
 	}
-	// TODO: close db on Caddy shutdown hook
 	c := &SQLiteCollector{
 		db: db,
 	}
+	caddy.RegisterEventHook("turnstile_sqlite_close", func(eventType caddy.EventName, eventInfo interface{}) error {
+		if eventType == caddy.ShutdownEvent {
+			log.Printf("[INFO] turnstile: sqlite: closing database")
+			err := c.Close()
+			if err != nil {
+				log.Printf("[ERROR] turnstile: sqlite: failed to close database: %s", err)
+			}
+		}
+		return nil
+	})
 	err = c.initDB()
 	if err != nil {
 		return nil, err
