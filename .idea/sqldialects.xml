@@ -3,5 +3,6 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/sqlite.go" dialect="SQLite" />
     <file url="file://$PROJECT_DIR$/sqlite_test.go" dialect="SQLite" />
+    <file url="file://$PROJECT_DIR$/store_optional_fields_as_nulls.sql" dialect="SQLite" />
   </component>
 </project>
