@@ -69,12 +69,14 @@ func (h Turnstile) ServeHTTP(w http.ResponseWriter, r *http.Request) (int, error
 	}
 	r.Body.Close()
 
-	if event := ExtractEvent(time.Now(), update); event != nil {
-		err := h.collector.Collect(*event)
-		if err != nil {
-			log.Printf("[ERROR] turnstile: error collecting event: %s", err)
+	go func(t time.Time, u Update) {
+		if event := ExtractEvent(t, u); event != nil {
+			err := h.collector.Collect(*event)
+			if err != nil {
+				log.Printf("[ERROR] turnstile: error collecting event: %s", err)
+			}
 		}
-	}
+	}(time.Now(), update)
 
 	r.Body = ioutil.NopCloser(&buf)
 	return h.next.ServeHTTP(w, r)
