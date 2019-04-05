@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/mholt/caddy"
@@ -18,6 +19,7 @@ import (
 type Turnstile struct {
 	collector Collector
 	next      httpserver.Handler
+	wg        *sync.WaitGroup
 }
 
 func init() {
@@ -49,10 +51,7 @@ func setup(c *caddy.Controller) error {
 
 	cfg := httpserver.GetConfig(c)
 	mid := func(next httpserver.Handler) httpserver.Handler {
-		return Turnstile{
-			collector: collector,
-			next:      next,
-		}
+		return New(collector, next)
 	}
 	cfg.AddMiddleware(mid)
 	return nil
@@ -64,12 +63,18 @@ func (h Turnstile) ServeHTTP(w http.ResponseWriter, r *http.Request) (int, error
 
 	var update Update
 	err := json.NewDecoder(rdr).Decode(&update)
+	// restore the response body
+	// note: this will only contain whatever was read by the call to Decode
+	r.Body = ioutil.NopCloser(&buf)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		log.Printf("[WARNING] turnstile: error decoding json: %s", err)
+		return h.next.ServeHTTP(w, r)
 	}
 	r.Body.Close()
 
+	h.wg.Add(1)
 	go func(t time.Time, u Update) {
+		defer h.wg.Done()
 		if event := ExtractEvent(t, u); event != nil {
 			err := h.collector.Collect(*event)
 			if err != nil {
@@ -78,6 +83,13 @@ func (h Turnstile) ServeHTTP(w http.ResponseWriter, r *http.Request) (int, error
 		}
 	}(time.Now(), update)
 
-	r.Body = ioutil.NopCloser(&buf)
 	return h.next.ServeHTTP(w, r)
+}
+
+func New(c Collector, next httpserver.Handler) Turnstile {
+	return Turnstile{
+		collector: c,
+		next:      next,
+		wg:        new(sync.WaitGroup),
+	}
 }
