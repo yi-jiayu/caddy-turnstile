@@ -58,6 +58,10 @@ func setup(c *caddy.Controller) error {
 }
 
 func (h Turnstile) ServeHTTP(w http.ResponseWriter, r *http.Request) (int, error) {
+	if r.Method != http.MethodPost {
+		return h.next.ServeHTTP(w, r)
+	}
+
 	var buf bytes.Buffer
 	rdr := io.TeeReader(r.Body, &buf)
 

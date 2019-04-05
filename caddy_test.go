@@ -40,7 +40,7 @@ func TestTurnstile_ServeHTTP(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	r := &http.Request{Body: ioutil.NopCloser(&b)}
+	r := &http.Request{Method: http.MethodPost, Body: ioutil.NopCloser(&b)}
 	collector := &MemoryCollector{}
 	next := &MockMiddleware{}
 	turnstile := New(collector, next)
@@ -78,7 +78,7 @@ func TestTurnstile_ServeHTTP(t *testing.T) {
 	})
 
 	t.Run("request body is still available to the next middleware even when json is invalid", func(t *testing.T) {
-		r := &http.Request{Body: ioutil.NopCloser(strings.NewReader("invalid json"))}
+		r := &http.Request{Method: http.MethodPost, Body: ioutil.NopCloser(strings.NewReader("invalid json"))}
 		collector := &MemoryCollector{}
 		next := &MockMiddleware{}
 		turnstile := New(collector, next)
