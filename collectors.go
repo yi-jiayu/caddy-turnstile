@@ -1,7 +1,7 @@
 package turnstile
 
 import (
-	"github.com/mholt/caddy/caddyfile"
+	"github.com/caddyserver/caddy/caddyfile"
 )
 
 var collectors = map[string]CollectorFactory{

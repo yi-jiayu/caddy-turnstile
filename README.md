@@ -24,11 +24,11 @@ SQLite requires `cgo`, so some modifications have to be made to the Caddy build 
 
 1. `go get` Caddy:
 
-        go get -u -v github.com/mholt/caddy
+        go get -u -v github.com/caddyserver/caddy
 
 2. Checkout Caddy `v0.11.5`:
 
-        cd $(go env GOPATH)/src/github.com/mholt/caddy
+        cd $(go env GOPATH)/src/github.com/caddyserver/caddy
         git checkout v0.11.5
 
 3. `go get` turnstile:
